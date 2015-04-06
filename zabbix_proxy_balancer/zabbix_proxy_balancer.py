@@ -25,7 +25,7 @@ def get_token():
 def get_zabbix_best_proxy(token):
     proxy_list = {}
     best_proxy = ""
-    group_id = json.loads(connect({"jsonrpc":"2.0","method":"hostgroup.get","params":{"output":"extend","filter":{"name": config.group['name']},"auth": token,"id":"1"}}))['result'][0]['groupid']
+    group_id = json.loads(connect({"jsonrpc": "2.0","method": "hostgroup.get","params": {"output": "extend","filter" : {"name": config.group['name']}},"auth": token,"id":"1"}))['result'][0]['groupid']
     ans = json.loads(connect({"jsonrpc": "2.0","method": "hostgroup.get","params": {"groupids": group_id,"output": "extend","selectHosts":""},"auth": token,"id":"1"}))['result']
     for item in ans:
         hosts = item['hosts']
