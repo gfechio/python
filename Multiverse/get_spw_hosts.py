@@ -15,13 +15,15 @@ def get_hostname():
         group_list.append(raw_group.get('name'))
     
     host_list = [] 
+    hostgroup_list = []
     host_list = server.system.listSystems(auth)
     for system in host_list:
         hostname = system.get('name')
         token = m.get_token()
-        hostgroup = zg.get_group(token, hostname)
-        if hostgroup not in group_list:
-            c_hostgroup = server.systemgroup.create(auth, hostgroup, hostgroup)
+        hostgroup_list = zg.get_group(token, hostname)
+        for hostgroup in hostgroup_list:
+            if hostgroup not in group_list:
+                c_hostgroup = server.systemgroup.create(auth, hostgroup, hostgroup)
 
     server.auth.logout(auth)
 
