@@ -5,6 +5,7 @@ import zabbix_proxy_balancer as proxy_balancer
 from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import zabbix_proxy_balancer_config as config
 
+token = proxy_balancer.get_token()
 output_file = config.log['file']
 
 logger = logging.getLogger('zabbix_proxy_balancer')
@@ -22,7 +23,9 @@ class http(BaseHTTPRequestHandler):
             self.send_response(200)
             self.send_header('Content-type','text/html')
             self.end_headers()
-            self.wfile.write(proxy_balancer.best_proxy)
+            self.wfile.write(proxy_balancer.get_zabbix_best_proxy(token))
+            return
+
 
         except IOError:
             self.send_error(404,'File Not Found: %s' % self.path)

@@ -35,12 +35,10 @@ def get_zabbix_best_proxy(token):
             for item in raw_value:
                 name = item['name']
                 if name == "Values processed by Zabbix proxy per second":
-                    value = item['lastvalue']
-                    proxy_list.update({hostid:value})
-                    best_proxy_id = min(proxy_list, key=proxy_list.get)
-                    best_proxy = json.loads(connect({"jsonrpc": "2.0","method": "host.get","params": {"hostids": best_proxy_id,"output": "extend"},"auth": token,"id":"1"}))['result'][0]['name']
+                    raw_value = item['lastvalue']
+                    value = raw_value.replace(".", "")
+                    proxy_list.update({json.loads(hostid):json.loads(value)})
+    best_proxy_id = min(proxy_list, key=proxy_list.get)
+    best_proxy = json.loads(connect({"jsonrpc": "2.0","method": "host.get","params": {"hostids": best_proxy_id,"output": "extend"},"auth": token,"id":"1"}))['result'][0]['name']
     print best_proxy
     return best_proxy
-
-token = get_token()
-best_proxy = get_zabbix_best_proxy(token)
